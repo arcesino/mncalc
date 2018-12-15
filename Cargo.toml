@@ -5,3 +5,7 @@ authors = ["Ignacio Arces <arcesino@gmail.com>"]
 edition = "2018"
 
 [dependencies]
+
+[dev-dependencies]
+assert_cmd = "0.10"
+predicates = "1"
