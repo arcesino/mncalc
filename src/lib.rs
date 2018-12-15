@@ -1,6 +1,8 @@
 use std::error::Error;
 use structopt::StructOpt;
 
+mod operation;
+
 #[derive(Debug, StructOpt)]
 #[structopt(name = "mncalc", about = "Simple Mixed Numbers Calculator")]
 pub struct Config {
@@ -10,8 +12,15 @@ pub struct Config {
 
 pub fn run(config: Config) -> Result<(), Box<dyn Error>> {
     match config.expression {
-        Some(expression) => println!("Evaluating expression: <{}>", expression.trim()),
+        Some(expression) => evaluate_expression(expression.trim()),
         None => println!("Starting repl mode. Type 'q' to quit\n")
     }
     Ok(())
+}
+
+pub fn evaluate_expression(expression: &str) {
+    let operation = operation::parse_operation(expression);
+    let result = operation.compute();
+
+    println!("= {}", result);
 }

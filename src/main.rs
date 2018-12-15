@@ -1,6 +1,9 @@
 use std::process;
 use structopt::StructOpt;
 
+#[macro_use] 
+extern crate lazy_static;
+
 fn main() {
     let config = mncalc::Config::from_args();
 
