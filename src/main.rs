@@ -1,3 +1,11 @@
+use std::process;
+use structopt::StructOpt;
+
 fn main() {
-    println!("Hello, world!");
+    let config = mncalc::Config::from_args();
+
+    if let Err(e) = mncalc::run(config) {
+        eprintln!("Error: {}", e);
+        process::exit(1);
+    }
 }

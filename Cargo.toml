@@ -5,6 +5,7 @@ authors = ["Ignacio Arces <arcesino@gmail.com>"]
 edition = "2018"
 
 [dependencies]
+structopt = "0.2.14"
 
 [dev-dependencies]
 assert_cmd = "0.10"
