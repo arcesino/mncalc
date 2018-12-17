@@ -3,7 +3,7 @@ use lazy_static::*;
 
 // This ensures the regexes are compiled only once
 lazy_static! {
-    static ref FRACTION_RE: Regex = Regex::new(r"^(\d+)/(\d+)$").unwrap();
+    static ref FRACTION_RE: Regex = Regex::new(r"^([\+\-]?\d+)/(\d+)$").unwrap();
 }
 
 #[derive(Debug, PartialEq)]

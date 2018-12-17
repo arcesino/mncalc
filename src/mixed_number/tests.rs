@@ -16,6 +16,20 @@ fn parse_full_mixed_number() {
 }
 
 #[test]
+fn parse_full_negative_mixed_number() {
+    let mixed_number_exp = "-2_1/2";
+
+    let mixed_number = parse_mixed_number(mixed_number_exp);
+
+    assert_that!(&mixed_number.whole)
+        .is_some()
+        .is_equal_to(&-2);
+    assert_that!(&mixed_number.fraction)
+        .is_some()
+        .is_equal_to(&Fraction { numerator: -1, denominator: 2 });
+}
+
+#[test]
 fn parse_fraction_only_mixed_number() {
     let mixed_number_exp = "1/2";
 

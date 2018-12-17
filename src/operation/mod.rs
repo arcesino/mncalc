@@ -14,11 +14,14 @@ pub struct Operation {
     pub right_operand: MixedNumber
 }
 
-impl Operation {
+ impl Operation {
     pub fn compute(&self) -> MixedNumber {
-        MixedNumber {
-            whole: Some(1),
-            fraction: Some(Fraction { numerator: 1, denominator: 2})
+        match self.operator.as_str() {
+            "+" => self.left_operand.add(&self.right_operand),
+            "-" => self.left_operand.substract(&self.right_operand),
+            "*" => self.left_operand.multiply(&self.right_operand),
+            "/" => self.left_operand.divide(&self.right_operand),
+            _ => panic!("Unsupported operation!") // This will never happen
         }
     }
 }
