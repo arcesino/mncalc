@@ -2,6 +2,8 @@ use std::error::Error;
 use structopt::StructOpt;
 
 mod operation;
+mod mixed_number;
+mod fraction;
 
 #[derive(Debug, StructOpt)]
 #[structopt(name = "mncalc", about = "Simple Mixed Numbers Calculator")]

@@ -1,27 +1,11 @@
-use std::fmt;
 use regex::Regex;
 use lazy_static::*;
+use crate::mixed_number::*;
+use crate::fraction::Fraction;
 
+// This ensures the regex is compiled only once
 lazy_static! {
-    static ref RE: Regex = Regex::new(r"\d+_\d+/\d+\s+[\+\-\*/]\s+\d+_\d+/\d+").unwrap();
-}
-
-#[derive(Debug, PartialEq)]
-pub struct Fraction {
-    pub numerator: i32,
-    pub denominator: i32
-}
-
-#[derive(Debug, PartialEq)]
-pub struct MixedNumber {
-    pub whole: i32,
-    pub fraction: Fraction
-}
-
-impl fmt::Display for MixedNumber {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.whole)
-    }
+    static ref RE: Regex = Regex::new(r"^\S+\s+[\+\-\*/]\s+\S+$").unwrap();
 }
 
 pub struct Operation {
@@ -33,28 +17,16 @@ pub struct Operation {
 impl Operation {
     pub fn compute(&self) -> MixedNumber {
         MixedNumber {
-            whole: 1,
-            fraction: Fraction { numerator: 1, denominator: 2}
+            whole: Some(1),
+            fraction: Some(Fraction { numerator: 1, denominator: 2})
         }
     }
 }
 
-pub fn parse_mixed_number(expression: &str) -> MixedNumber {
-    let elements: Vec<&str> = expression.split('_').collect();
-    let fraction_elements: Vec<&str> = elements[1].split('/').collect();
-
-    MixedNumber {
-        whole: elements[0].parse().unwrap(),
-        fraction: Fraction { 
-            numerator: fraction_elements[0].parse().unwrap(), 
-            denominator: fraction_elements[1].parse().unwrap()
-        }
-    }
-}
-
-pub fn parse_operation(expression: &str) -> Operation {
-    check_parseable_expression(expression);
-    let elements: Vec<&str> = expression.split(' ').collect();
+pub fn parse_operation(operation_expression: &str) -> Operation {
+    let trimmed_operation_expression = operation_expression.trim();
+    check_parseable_expression(trimmed_operation_expression);
+    let elements: Vec<&str> = trimmed_operation_expression.split(' ').collect();
 
     Operation {
         left_operand: parse_mixed_number(elements[0]),
@@ -63,11 +35,11 @@ pub fn parse_operation(expression: &str) -> Operation {
     }
 }
 
-pub fn check_parseable_expression(expression: &str) {
-    if !RE.is_match(expression) {
-        panic!("Unparseable expression! {}", expression)
+pub fn check_parseable_expression(operation_expression: &str) {
+    if !RE.is_match(operation_expression) {
+        panic!("Unparseable operation! <{}>", operation_expression)
     }
 }
 
 #[cfg(test)]
-mod operation_tests;
+mod tests;
