@@ -1,64 +1,55 @@
 use spectral::prelude::*;
 use super::*;
+use crate::fraction::Fraction;
 
 #[test]
 fn parse_full_mixed_number() {
     let mixed_number_exp = "2_1/2";
 
-    let mixed_number = parse_mixed_number(mixed_number_exp);
+    let actual = parse_as_fraction(mixed_number_exp);
 
-    assert_that!(&mixed_number.whole)
-        .is_some()
-        .is_equal_to(&2);
-    assert_that!(&mixed_number.fraction)
-        .is_some()
-        .is_equal_to(&Fraction { numerator: 1, denominator: 2 });
+    let expected = Fraction::new(5, 2);
+    assert_that!(&actual)
+        .is_equal_to(&expected);
 }
 
 #[test]
 fn parse_full_negative_mixed_number() {
     let mixed_number_exp = "-2_1/2";
 
-    let mixed_number = parse_mixed_number(mixed_number_exp);
+    let actual = parse_as_fraction(mixed_number_exp);
 
-    assert_that!(&mixed_number.whole)
-        .is_some()
-        .is_equal_to(&-2);
-    assert_that!(&mixed_number.fraction)
-        .is_some()
-        .is_equal_to(&Fraction { numerator: -1, denominator: 2 });
+    let expected = Fraction::new(-5, 2);
+    assert_that!(&actual)
+        .is_equal_to(&expected);
 }
 
 #[test]
 fn parse_fraction_only_mixed_number() {
     let mixed_number_exp = "1/2";
 
-    let mixed_number = parse_mixed_number(mixed_number_exp);
+    let actual = parse_as_fraction(mixed_number_exp);
 
-    assert_that!(&mixed_number.whole)
-        .is_none();
-    assert_that!(&mixed_number.fraction)
-        .is_some()
-        .is_equal_to(&Fraction { numerator: 1, denominator: 2 });
+    let expected = Fraction::new(1, 2);
+    assert_that!(&actual)
+        .is_equal_to(&expected);
 }
 
 #[test]
 fn parse_whole_only_mixed_number() {
     let mixed_number_exp = "2";
 
-    let mixed_number = parse_mixed_number(mixed_number_exp);
+    let actual = parse_as_fraction(mixed_number_exp);
 
-    assert_that!(&mixed_number.whole)
-        .is_some()
-        .is_equal_to(&2);
-    assert_that!(&mixed_number.fraction)
-        .is_none();
+    let expected = Fraction::new(2, 1);
+    assert_that!(&actual)
+        .is_equal_to(&expected);
 }
 
 #[test]
-#[should_panic(expected = "Unparseable mixed number! <2__1/2>")]
-fn parse_mixed_number_with_invalid_expresion() {
+#[should_panic(expected = "Unparseable mixed number!")]
+fn parse_as_fraction_with_invalid_expresion() {
     let mixed_number_exp = "2__1/2";
 
-    parse_mixed_number(mixed_number_exp);
+    parse_as_fraction(mixed_number_exp).unwrap();
 }
