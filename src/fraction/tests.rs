@@ -5,7 +5,7 @@ use super::*;
 fn is_fraction_with_valid_expression() {
     let fraction_exp = "1/2";
 
-    assert_that!(&is_fraction(fraction_exp))
+    assert_that!(&Fraction::is_fraction(fraction_exp))
         .is_true();
 }
 
@@ -13,7 +13,7 @@ fn is_fraction_with_valid_expression() {
 fn is_fraction_with_invalid_expression() {
     let fraction_exp = "2";
 
-    assert_that!(&is_fraction(fraction_exp))
+    assert_that!(&Fraction::is_fraction(fraction_exp))
         .is_false();
 }
 
@@ -21,7 +21,7 @@ fn is_fraction_with_invalid_expression() {
 fn parse_fraction_with_valid_expresion() {
     let fraction_exp = "1/2";
 
-    let fraction = parse_fraction(fraction_exp).unwrap();
+    let fraction = Fraction::parse_fraction(fraction_exp).unwrap();
 
     assert_that!(&fraction.numerator)
         .is_equal_to(&1);
@@ -33,7 +33,7 @@ fn parse_fraction_with_valid_expresion() {
 fn parse_fraction_with_valid_negative_expresion() {
     let fraction_exp = "-1/2";
 
-    let fraction = parse_fraction(fraction_exp).unwrap();
+    let fraction = Fraction::parse_fraction(fraction_exp).unwrap();
 
     assert_that!(&fraction.numerator)
         .is_equal_to(&-1);
@@ -45,7 +45,7 @@ fn parse_fraction_with_valid_negative_expresion() {
 fn parse_fraction_with_negative_elements() {
     let fraction_exp = "-1/-2";
 
-    let fraction = parse_fraction(fraction_exp).unwrap();
+    let fraction = Fraction::parse_fraction(fraction_exp).unwrap();
 
     assert_that!(&fraction.numerator)
         .is_equal_to(&1);
@@ -58,7 +58,7 @@ fn parse_fraction_with_negative_elements() {
 fn parse_fraction_with_invalid_expresion() {
     let fraction_exp = "2";
 
-    parse_fraction(fraction_exp).unwrap();
+    Fraction::parse_fraction(fraction_exp).unwrap();
 }
 
 #[test]

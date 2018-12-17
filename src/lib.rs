@@ -2,58 +2,21 @@ use std::io;
 use std::io::prelude::*;
 use std::process;
 
-use structopt::StructOpt;
-
 mod operation;
 mod mixed_number;
 mod fraction;
 mod math;
 
-#[derive(Debug, StructOpt)]
-#[structopt(name = "mncalc", about = "Simple Mixed Numbers Calculator")]
-pub struct Config {
-    #[structopt(short = "e", long = "eval", help = "The expression to evaluate")]
-    expression: Option<String>
-}
-
-pub fn run(config: Config) {
-    match config.expression {
-        Some(expression) => run_single_evaluation(&expression),
-        None => run_repl_evaluation()
-    }
-}
-
-fn run_single_evaluation(expression: &str) {
+/// Single evaluation mode evaluates the given expression and terminates
+pub fn run_single_evaluation(expression: &str) {
     let result = evaluate_expression(&expression);
     if result.is_err() {
         process::exit(1);
     }
 }
 
-fn evaluate_expression(expression: &str) -> Result<(), &str> {
-    let result = operation::parse_operation(expression);
-    match result {
-        Ok(operation) => process_operation(operation),
-        Err(e) => log_and_propagate_error(e)
-    }
-}
-
-fn process_operation(operation: operation::Operation) -> Result<(), &'static str> {
-    match operation.compute() {
-        Ok(result) => println!("= {}", result),
-        Err(e) => log_and_propagate_error(e)?
-    }
-
-    Ok(())
-}
-
-fn log_and_propagate_error(error: &str) -> Result<(), &'static str> {
-    eprintln!("Error: {}", error);
-    
-    Err("Application error!")
-}
-
-fn run_repl_evaluation() {
+/// REPL evaluation runs in a loop than terminates only when the user enters 'q'
+pub fn run_repl_evaluation() {
     println!("Starting repl mode. Type 'q' to quit\n");
 
     loop {
@@ -71,4 +34,26 @@ fn run_repl_evaluation() {
 
         evaluate_expression(&expression).ok();
     }
+}
+
+fn evaluate_expression(expression: &str) -> Result<(), &str> {
+    let result = operation::Operation::parse_operation(expression);
+    match result {
+        Ok(operation) => process_operation(operation),
+        Err(e) => log_and_propagate_error(e)
+    }
+}
+
+fn process_operation(operation: operation::Operation) -> Result<(), &'static str> {
+    match operation.compute() {
+        Ok(result) => println!("= {}", result),
+        Err(e) => log_and_propagate_error(e)?
+    }
+
+    Ok(())
+}
+
+fn log_and_propagate_error(error: &str) -> Result<(), &'static str> {
+    eprintln!("Error: {}", error);
+    Err("Application error!")
 }

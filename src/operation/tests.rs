@@ -9,7 +9,7 @@ fn parse_operation_with_valid_expressions() {
     // This is the only way to "parameterize" tests in Rust
     for operation_expression in &operation_expressions {
         println!("Testing expression {}", operation_expression); // To help identify failing test case
-        let operation = parse_operation(operation_expression).unwrap();
+        let operation = Operation::parse_operation(operation_expression).unwrap();
 
         let expected_left_operand = Fraction::new(5, 2).unwrap();
         assert_that!(&operation.left_operand)
@@ -28,14 +28,14 @@ fn parse_operation_with_valid_expressions() {
 fn parse_operation_with_invalid_expression() {
     let operation_expression = "2_1/2 * 2 3_3/4";
 
-    parse_operation(operation_expression).unwrap();
+    Operation::parse_operation(operation_expression).unwrap();
 }
 
 // This function will help test supported computations in tests below
 fn test_compute_operations(context: &str, operation_test_cases: &[(&str, &str)]) {
     for (operation_expression, result_expression) in operation_test_cases {
         println!("{} expression {}", context, operation_expression);
-        let operation = parse_operation(operation_expression).unwrap();
+        let operation = Operation::parse_operation(operation_expression).unwrap();
 
         let actual_result = operation.compute().unwrap();
 
